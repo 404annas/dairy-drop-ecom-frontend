@@ -1,0 +1,39 @@
+name: Deploy Frontend to Linode
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    name: Build React App on Server
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Executing remote SSH commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # 1. Load NVM so 'npm' is found
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            
+            # 2. Go to frontend folder
+            cd ~/sites/dairy-drop/frontend
+            
+            # 3. Pull latest code
+            git pull origin main
+            
+            # 4. Install and Build
+            # This generates the 'dist' folder that Nginx serves
+            npm install
+            npm run build
+            
+            # 5. Success check
+            echo "Frontend Build Completed Successfully"
