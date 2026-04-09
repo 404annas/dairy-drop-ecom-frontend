@@ -83,7 +83,7 @@ export default function NavBar() {
           {/* Menu Links */}
           <div className='hidden md:flex items-center space-x-8'>
             <Link to="/" onClick={() => scrollTo(0, 0)} className='text-gray-700 hover:text-blue-600 font-medium transition-colors'>
-              Homee
+              Home
             </Link>
             <Link to="/products" onClick={() => scrollTo(0, 0)} className='text-gray-700 hover:text-blue-600 font-medium transition-colors'>
               Products
